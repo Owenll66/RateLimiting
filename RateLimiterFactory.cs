@@ -1,4 +1,4 @@
-﻿namespace Playground
+﻿namespace RateLimiting
 {
     public static class RateLimiterFactory
     {

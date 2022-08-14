@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Playground
+namespace RateLimiting
 {
     public class FixedWindowRateLimiter : RateLimiter
     {
