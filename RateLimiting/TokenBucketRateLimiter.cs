@@ -7,10 +7,14 @@
         private DateTime? _lastRequestedTime;
         private object _lockObj = new object();
 
-        public TokenBucketRateLimiter(int maxRequestNum, int period, int initialToken = 0)
+        /// <inheritdoc/>
+        /// <param name="initialTokens">
+        /// Set the number of the initialToken to 0 to avoid burst rate in the begining.
+        /// </param>
+        public TokenBucketRateLimiter(int maxRequestNum, int period, int initialTokens = 0)
             : base(maxRequestNum, period)
         {
-            _initialToken = initialToken;
+            _initialToken = initialTokens;
         }
 
         public override bool IsAllow()
@@ -27,6 +31,7 @@
                 else
                 {
                     var gap = currentTime - _lastRequestedTime;
+                    // Lazy refilling - refill only when the request is received (expect for the first request).
                     var tokensToRefill = (gap.Value.TotalMilliseconds / 1000) * ((double)MaxRequestNum / Period);
                     _currentToken = Math.Min(_currentToken + tokensToRefill, MaxRequestNum);
                 }
