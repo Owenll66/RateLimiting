@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 
 namespace RateLimiting
 {
     public class FixedWindowRateLimiter : RateLimiter
     {
+        // TODO: Need a logic to clean up the window.
         // key is the window start time. value is the number of requests accepted.
-        private ConcurrentDictionary<long, int> _windowCounts = new ConcurrentDictionary<long, int>();
-        private object _lockObj = new object();
+        private ConcurrentDictionary<long, int> _windowCounts = new();
+        private object _lockObj = new();
 
         public FixedWindowRateLimiter(int maxRequestNum, int period)
             : base(maxRequestNum, period)
@@ -20,6 +20,9 @@ namespace RateLimiting
 
             if (_windowCounts.TryAdd(window, 1))
             {
+                // If the key doesn't exists, it will add a new entry in the
+                // dictionary and start counting the number of requests received in
+                // that window frame.
                 return true;
             }
             else

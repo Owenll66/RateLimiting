@@ -4,8 +4,8 @@ namespace RateLimiting
 {
     public class SlidingWindowRateLimiter : RateLimiter
     {
-        private ConcurrentDictionary<long, int> _windowCount = new ConcurrentDictionary<long, int>();
-        private object _lock = new object();
+        private readonly ConcurrentDictionary<long, int> _windowCount = new();
+        private readonly object _lock = new();
 
         public SlidingWindowRateLimiter(int maxRequestNum, int period)
             : base(maxRequestNum, period)

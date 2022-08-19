@@ -2,10 +2,11 @@
 {
     public class TokenBucketRateLimiter : RateLimiter
     {
+        private readonly double _initialToken;
+        private readonly object _lockObj = new();
+
         private double _currentToken;
-        private double _initialToken;
         private DateTime? _lastRequestedTime;
-        private object _lockObj = new object();
 
         /// <inheritdoc/>
         /// <param name="initialTokens">
